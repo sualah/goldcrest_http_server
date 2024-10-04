@@ -9,24 +9,21 @@ defmodule Goldcrest.HTTPResponse do
 
   @http_version 1.1
 
-  def to_string(
-        %__MODULE__{
-          status: status,
-          body: body
-        } = htttp_response
-      ) do
-        """
-        HTTP/#{@http_version} #{status}\r
-        #{Enum.join(headers_string(htttp_response), "\r\n")}
-        \r
-        #{body}
-        """
+  def to_string(%__MODULE__{status: status, body: body} = http_response) do
+    """
+    HTTP/#{@http_version} #{status}\r
+    #{Enum.join(headers_string(http_response), "\r\n")}
+    \r
+    #{body}
+    """
   end
 
   defp headers_string(http_response) do
     http_response
     |> headers
-    |> Enum.map(fn {key, value} -> "#{key}: #{value}" end)
+    |> Enum.map(fn {key, value} ->
+      "#{key}: #{value}"
+    end)
   end
 
   defp headers(%__MODULE__{body: body, headers: headers}) do
